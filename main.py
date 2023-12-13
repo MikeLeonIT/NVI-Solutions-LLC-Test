@@ -1,7 +1,10 @@
 import encodings
+import os
+import shutil
+import sys
+
+import pdf_reader
 from design import *
-from PyQt6 import QtCore, QtGui, QtWidgets
-import pdf_reader, sys
 
 
 class Leonscene(QtWidgets.QGraphicsScene):
@@ -37,6 +40,21 @@ class MyApp(QtWidgets.QDialog):
         self.ui.previousButton.clicked.connect(self.previous)
         self.result = []
         self.count = 0
+
+    def closeEvent(self, event):
+        path_name = "tmp"
+        if os.path.exists(path_name):
+            for filename in os.listdir(path_name):
+                file_path = os.path.join(path_name, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+            os.rmdir(path_name)
+        event.accept()
 
     def show_page(self, count):
         scene = Leonscene(self)

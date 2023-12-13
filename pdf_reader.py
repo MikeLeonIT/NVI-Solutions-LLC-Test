@@ -1,5 +1,7 @@
+import os
+import shutil
+
 import fitz
-import os, shutil
 
 
 def convert_pdf(filename):
@@ -19,7 +21,6 @@ def convert_pdf(filename):
                     shutil.rmtree(file_path)
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
-        #os.makedirs(path_name)
 
     for i, page in enumerate(doc):
         pix = page.get_pixmap()
